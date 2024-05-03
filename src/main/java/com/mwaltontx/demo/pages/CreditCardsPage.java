@@ -10,20 +10,22 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CreditCardsPage extends TestBase {
-    @FindBy(xpath = "//div[@class='cchp-carousel-container tsi']")
-    WebElement parentCreditCardProducts;
-
+    @FindBy(xpath = "//div[@class='dfscontainer light-theme aem-GridColumn aem-GridColumn--default--12']")
+    List<WebElement> creditCardProducts;
 
     public CreditCardsPage() {
         PageFactory.initElements(driver, this);
     }
 
     public void applySecuredCreditCard() {
-        getApplyNow(getSecuredCreditCard()).click();
+        WebElement applyNow = getApplyNow(getSecuredCreditCard());
+
+        // TODO: This click() works about 60% of the time from my machine
+        // Would suggest running from other machines to see if similar experience before triaging further
+        applyNow.click();
     }
 
     public WebElement getSecuredCreditCard() {
-        List <WebElement> creditCardProducts = parentCreditCardProducts.findElements(By.xpath("./child::*"));
         return creditCardProducts.stream()
             .filter(item -> item.findElement(By.xpath(".//a[@class='cmp-button cmp-link-blue-font ']")).getText().contains("Secured Credit Card"))
             .collect(Collectors.toList())
